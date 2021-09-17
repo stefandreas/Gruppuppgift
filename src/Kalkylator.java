@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class Kalkylator {
-    public static Boolean flagga = true;
 
     public static void main(String[] args) {
         printMenu();
@@ -12,10 +11,13 @@ public class Kalkylator {
     public static void printMenu() {
         Scanner scan = new Scanner(System.in);
         String[] meny = {"1. Roten ur", "2. Procent", "3. Phytagoras sats", "4. Cirkelns area", "5. Avsluta",
-                "Gör ett val från menyn genom att skriva en siffra mellan 1 och 5"};
+                "Gör ett val från menyn genom att skriva en siffra mellan 1 och 5 : "};
 
         for (int i = 0; i < 6; i++) {
-            System.out.println(meny[i]);
+            if(i<5) {
+                System.out.println(meny[i]);
+            }else
+                System.out.print(meny[i]);
         }
         while (scan.hasNext()) {
             if (scan.hasNextInt()) {
@@ -25,11 +27,13 @@ public class Kalkylator {
                     case 1:
                         double sqof = sqrtof();
                         System.out.println("Roten ur är: " + sqof);
+                        System.out.println();
                         printMenu();
                         break;
                     case 2:
                         double svar = procent();
-                        System.out.println("Andelen av värdet är "+svar);
+                        System.out.println("Andelen av värdet är " + svar);
+                        System.out.println();
                         printMenu();
                         break;
                     case 3:
@@ -78,51 +82,61 @@ public class Kalkylator {
         return squar;
     }
 
-    public static double getVal(double min, double max) {
+    public static double[] getVal(double minPro, double maxPro, double minVal, double maxVal) {
         double heltal = 0;
-        double retval = 0;
+        double[] arrayReturn = new double[2];
 
-        if (flagga) {
-            System.out.print("Ange ett procenttal mellan 0 till 100 : ");
-            Scanner scan3 = new Scanner(System.in);
+        System.out.print("Ange ett procenttal mellan 0 till 100 : ");
+        Scanner scan3 = new Scanner(System.in);
+        Boolean flag = true;
+        Boolean flag2 = true;
+        while (flag) {
             if (scan3.hasNextDouble()) {
                 heltal = scan3.nextDouble();
-                if (heltal >= min && heltal <= max) {
-                    retval = heltal;
-                    flagga = false;
+                if (heltal >= minPro && heltal <= maxPro) {
+                    arrayReturn[0] = heltal;
+                    flag = false;
+                } else {
+                    scan3.nextLine();
+                    System.out.println("Det var inte ett procenttal mellan 0 och 100, försök igen :");
                 }
             } else {
                 scan3.nextLine();
-                System.out.println("Det var inte ett procenttal mellan 0 och 100!");
-                //getVal(min, max);
+                System.out.println("Det var inte ett procenttal mellan 0 och 100, försök igen :");
             }
         }
-        if(!flagga){
+        while (flag2) {
             System.out.print("Ange ett värde mellan 1 och 50 : ");
-            Scanner scan3 = new Scanner(System.in);
-            if (scan3.hasNextDouble()) {
-                heltal = scan3.nextDouble();
-                if (heltal >= min && heltal <= max) {
-                    retval = heltal;
-                    flagga = true;
+            Scanner scan4 = new Scanner(System.in);
+            if (scan4.hasNextDouble()) {
+                heltal = scan4.nextDouble();
+                if (heltal >= minVal && heltal <= maxVal) {
+                    arrayReturn[1] = heltal;
+                    flag2 = false;
+                }else {
+                    scan4.nextLine();
+                    System.out.println("Det var inte ett tal mellan 1 och 50, försök igen :");
                 }
             } else {
-                scan3.nextLine();
-                System.out.println("Det var inte ett tal mellan 1 och 50, försök igen ");
-                //getVal(min, max);
+                scan4.nextLine();
+                System.out.println("Det var inte ett tal mellan 1 och 50, försök igen :");
             }
         }
-            return retval;
-    }
+                return arrayReturn;
+        }
+
     public static double procent(){
-        double min = 0;
-        double max = 100;
+        double minPro = 0;
+        double maxPro = 100;
         double minVal = 1;
         double maxVal = 50;
-        double procentTal = getVal(min,max);
-        double value = getVal(minVal,maxVal);
+        double[] procentTal = getVal(minPro,maxPro,minVal,maxVal);
+        double procent = 0;
+        double value = 0;
+        procent = procentTal[0];
+        value = procentTal[1];
         final double decimal = 100;
-        double andel = procentTal/decimal * value;
+        double andel = procent/decimal * value;
         return andel;
     }
 }
